@@ -80,7 +80,7 @@ export interface Idd {
 }
 
 export interface Languages {
-    nld: string;
+    spa: string;
     pap: string;
 }
 

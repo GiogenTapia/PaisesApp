@@ -12,16 +12,23 @@ export class PorPaisComponent implements OnInit {
  termino : string = '';
  hayError : boolean = false;
  paises : Country[] = [];
+ paisesSug : Country[] = [];
+ mostrarSug : boolean = false;
+
+
   constructor(private paisService : PaisService) { }
 
   ngOnInit(): void {
   }
   
-  buscar(){
+  buscar(termino: string){
     this.hayError = false;
+    this.termino = termino;
+    this.mostrarSug = false;
     this.paisService.obtenerPais(this.termino).subscribe(
       (paises)=>
       {
+        
         this.paises = paises;
        
       },(err)=>{
@@ -32,5 +39,25 @@ export class PorPaisComponent implements OnInit {
       }
     )
   
+  }
+
+  buscarSugerido(termino : string){
+    this.buscar(termino);
+    
+  }
+
+  sugerencias(termino : string){
+    this.hayError = false;
+    this.termino = termino;
+    this.mostrarSug = true;
+
+    if(termino===""){
+      this.mostrarSug = false;
+      return;
+    }
+    this.paisService.obtenerPais(termino).subscribe(
+      paises=> this.paisesSug = paises.splice(0,5),
+      (err)=> this.paisesSug = []
+    );
   }
 }
